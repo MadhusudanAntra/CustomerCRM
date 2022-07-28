@@ -1,4 +1,9 @@
+using CustomerCRM.Core.Contracts.Repository;
+using CustomerCRM.Core.Contracts.Service;
 using CustomerCRM.Infrastructure.Data;
+using CustomerCRM.Infrastructure.Repository;
+using CustomerCRM.Infrastructure.Service;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -6,9 +11,19 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 
 
-builder.Services
-    .AddSqlServer<CustomerCrmDbContext>(builder.Configuration.GetConnectionString("CustomerCRM"));
 
+
+builder.Services.AddScoped<IRegionRepositoryAsync, RegionRepositoryAsync>();
+builder.Services.AddScoped<IRegionServiceAsync, RegionServiceAsync>();
+
+builder.Services.AddSqlServer<CustomerCrmDbContext>(builder.Configuration.GetConnectionString("CustomerCRM"));
+/*
+builder.Services.AddDbContext<CustomerCrmDbContext>(
+    option => {
+        option.UseSqlServer(builder.Configuration.GetConnectionString("CustomerCRM"));
+    }
+    );
+*/
 
 
 var app = builder.Build();
